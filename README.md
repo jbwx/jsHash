@@ -11,7 +11,7 @@ Takes an object of any size, and returns a pseudorandom 16-digit hexadecimal str
 ### Usage
 
     import {hash} from "https://jbwx.github.io/jsHash/jsHash.js";
-    hash("Hello, world!")
+    hash("Hello, world!");
     
 ### Notes
 
