@@ -10,7 +10,7 @@ Takes an object of any size, and returns a pseudorandom 16-digit hexadecimal str
 
 ### Usage
 
-    import {hash} from "https://jbwx.github.io/jsHash/jsHash.js";
+    <script src="https://jbwx.github.io/jsHash/jsHash.js"></script>
     hash("Hello, world!");
     
 ### Notes
