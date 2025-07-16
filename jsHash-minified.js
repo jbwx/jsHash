@@ -1,0 +1,1 @@
+function hash(t){const e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";let h=0,l=0,n=String(t)+typeof t+"jsHashSeed";for(let t=0;t<n.length;t++)h=(h<<5)-h+n.charCodeAt(t),l=(l<<5)-l+n.charCodeAt(n.length-1-t),h|=0,l|=0;let o="";for(let t=0;t<8;t++){let n=h^l+t;n^=n>>>17,n^=n>>>8;o+=e[Math.abs(n)%62],h=(h<<3)-h^l,h|=0,l=(l<<3)-l^h,l|=0}return o}
