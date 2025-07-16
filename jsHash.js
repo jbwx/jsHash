@@ -1,43 +1,46 @@
-function hash(input){
+function hash(input) {
+  // 62 possibilities, 8 characters long. 62^8 = approx 218 trillion. Good enough for me
+  const outputDomain = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; 
+  const magic = "jsHashSeed"; // pad to ensure minimum length is met (8).
 
-    if(input === undefined || input === null){ // check if valid input
-        console.error("Can't hash null or undefined input");
-        return null;
-    }
+  // accumulators (backward, forward)
+  let ac1 = 0;
+  let ac2 = 0;
 
-    input = input.toString() + "GMaQLe9RDsASMxZm"; // convert input to string, append filler to ensure 16 digits minimum
-    let sum = input.charCodeAt(0); // initial sum
-    let accumulator = ""; // final output string that gets converted to an int
-    let output = [ // 16 9-digit primes, serve as mask
-                    808933981, 
-                    765809491,
-                    390493679,
-                    544627277,
-                    856868113,
-                    704909377,
-                    572600191,
-                    821097707,
-                    230376011,
-                    184848203,
-                    473243581,
-                    687924253,
-                    446183149,
-                    856675481,
-                    557158177,
-                    537446519
-                 ];
+  let s = String(input) + // stringify input
+          typeof input  + // append type of input (avoid)
+          magic;          // append magic number
 
-    for(let i = 0; i < input.length; i++){ // accumulate sum
-        sum += Math.pow(input.charCodeAt(i), 2) * i;
-    }
-
-    for(let i = 0; i < input.length; i++){ // mash sum with each input digit
-        output[i % 16] = (output[i % 16] ^ Math.abs(sum ^ input.charCodeAt(i))) % 16;
-    }
-
-    for(let i = 0; i < 16; i++){ // concatonate into string
-        accumulator += output[i].toString(16);
-    }
+  // djb2-like mixing, two passes
+  for (let i = 0; i < s.length; i++) {
+    // mix the characters into the accumulators
+    ac1 = (ac1 << 5) - ac1 + s.charCodeAt(i);
+    ac2 = (ac2 << 5) - ac2 + s.charCodeAt(s.length - 1 - i);
     
-    return accumulator;
+    // coerce to 32-bit integers
+    ac1 |= 0;
+    ac2 |= 0;
+  }
+
+  // mix accumulators & generate the output
+  let result = "";
+  for (let i = 0; i < 8; i++) {
+    let mixed = ac1 ^ (ac2 + i);
+
+    // unsigned rightshifts
+    mixed ^= mixed >>> 17;
+    mixed ^= mixed >>> 8;
+
+    // use the value to get an index
+    const index = Math.abs(mixed) % outputDomain.length;
+    result += outputDomain[index];
+
+    // additional hashing rounds on the accumulators
+    ac1 = ((ac1 << 3) - ac1) ^ ac2;
+    ac1 |= 0;
+    ac2 = ((ac2 << 3) - ac2) ^ ac1;
+    ac2 |= 0;
+  }
+
+  return result;
 }
