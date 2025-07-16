@@ -114,7 +114,7 @@ This analysis combines total character frequency with positional frequency.
 
 <br>
 
-## 2. Common Substring Analysis
+## Common Substring Analysis
 
 This test looks for repeating patterns inside the hashes. The score is calculated as `(Substring Length) * (Number of Occurrences)`. A good hash function should produce very few, low-scoring patterns.
 
